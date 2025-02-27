@@ -1,15 +1,25 @@
-import { serve } from '@hono/node-server'
-import { Hono } from 'hono'
+import { serve } from "@hono/node-server";
+import "dotenv/config";
+import { Hono } from "hono";
 
-const app = new Hono()
+import Stripe from "stripe";
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 
-app.get('/', (c) => {
-  return c.text('Hello mom!')
-})
+const app = new Hono();
+app.get("/", (c) => {
+  return c.text("Hello mom!");
+});
 
-serve({
-  fetch: app.fetch,
-  port: 3000
-}, (info) => {
-  console.log(`Server is running on http://localhost:${info.port}`)
-})
+app.post("/", (c) => {
+  return c.text("Post request!");
+});
+
+serve(
+  {
+    fetch: app.fetch,
+    port: 3000,
+  },
+  (info) => {
+    console.log(`Server is running on http://localhost:${info.port}`);
+  },
+);
